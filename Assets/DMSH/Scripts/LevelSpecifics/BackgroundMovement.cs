@@ -5,15 +5,17 @@ using UnityEngine;
 public class BackgroundMovement : MonoBehaviour
 {
     public float speed = 3.0f;
-    public GameObject backgroundObject;
+    public SectionObject backgroundObject;
 
     protected void Start()
     {
-        backgroundObject = gameObject;
+
     }
 
     protected void Update()
     {
-        backgroundObject.transform.position = new Vector3(backgroundObject.transform.position.x, backgroundObject.transform.position.y, backgroundObject.transform.position.z - speed * Time.deltaTime);
+        backgroundObject.plane.transform.localPosition = new Vector3(backgroundObject.plane.transform.localPosition.x, backgroundObject.plane.transform.localPosition.y, backgroundObject.plane.transform.localPosition.z - speed * Time.deltaTime);
+        backgroundObject.planeEndPoint = new Vector3(backgroundObject.planeEndPoint.x, backgroundObject.planeEndPoint.y, backgroundObject.planeEndPoint.z - speed * Time.deltaTime);
+        backgroundObject.planeMiddlePoint = new Vector3(backgroundObject.planeMiddlePoint.x, backgroundObject.planeMiddlePoint.y, backgroundObject.planeMiddlePoint.z - speed * Time.deltaTime);
     }
 }
