@@ -10,6 +10,7 @@ public class SectionObject
     public List<GameObject> interiorObjects = new List<GameObject>();
     public Vector3 planeEndPoint;
     public Vector3 planeMiddlePoint;
+    public int index;
 }
 
 public class Background : MonoBehaviour
@@ -27,7 +28,7 @@ public class Background : MonoBehaviour
         {
             SectionObject so = _sectionObjects[i];
             if(so != null)
-                GUILayout.Label($"{so.planeEndPoint} {so.planeMiddlePoint} {so.plane.name}");
+                GUILayout.Label($"{i} {so.trigger.GetComponent<BackgroundResetTrigger>().backgroundObject == null}{so.planeEndPoint} {so.planeMiddlePoint} {so.plane.name}");
         }
     }
 
@@ -47,18 +48,20 @@ public class Background : MonoBehaviour
 
     protected void Start()
     {
-        _root = new GameObject("Root");
+        //Create a root for sections
+        _root = new GameObject();
         _root.name = $"Root{_root.GetInstanceID()}";
         _root.transform.position = transform.position;
 
         for (int i = 0; i < COUNT_OF_SECTIONS; i++)
         {
-            Debug.Log(i);
+            //Debug.Log(i);
 
+            //Create new section
             SectionObject section = new SectionObject();
 
             //1 Step
-            //Create place 
+            //Create plane 
             Vector3 planeMiddlePoint = Vector3.zero;
 
             section.plane = GameObject.CreatePrimitive(PrimitiveType.Plane);
@@ -82,7 +85,7 @@ public class Background : MonoBehaviour
                 section.plane.transform.position.y,
                 (section.plane.transform.localScale.z * 5 * (i + 1)) + (i * 100)); //Idk but it's works
 
-            section.trigger = new GameObject("Trigger" + section.plane.name);
+            section.trigger = new GameObject($"Trigger{section.plane.name}");
             section.trigger.transform.parent = section.plane.transform;
             section.trigger.transform.position = section.planeEndPoint;
 
@@ -99,38 +102,43 @@ public class Background : MonoBehaviour
             section.interiorObjectsRoot.transform.parent = section.plane.transform;
             //section.interiorObjectsRoot.transform.position = -section.planeEndPoint;
             section.interiorObjectsRoot.transform.localScale = Vector3.one;
-            
+
             //3 Step
             //Random cubes
-            for (int s = 1; s <= 3; s++)
-            {
-                for (int j = 0; j <= (int)section.plane.transform.localScale.z / 2; j++)
-                {
-                    GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
-                    cube.name = $"CubeL{section.plane.GetInstanceID()}{j}";
-                    cube.transform.parent = section.interiorObjectsRoot.transform;
-                    cube.transform.localScale = new Vector3(2.0f, Random.Range(16.0f, 45.0f * s), Random.Range(0.5f, 1.0f));
-                    cube.transform.localPosition = new Vector3(section.plane.transform.localScale.x * 2 * s, (section.plane.transform.parent.position.y / 2) * s, j);
-                    section.interiorObjects.Add(cube);
-                }
+            /*  
+              for (int s = 1; s <= 3; s++)
+              {
+                  for (int j = 0; j <= (int)section.plane.transform.localScale.z / 2; j++)
+                  {
+                      GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
+                      cube.name = $"CubeL{section.plane.GetInstanceID()}{j}";
+                      cube.transform.parent = section.interiorObjectsRoot.transform;
+                      cube.transform.localScale = new Vector3(2.0f, Random.Range(16.0f, 45.0f * s), Random.Range(0.5f, 1.0f));
+                      cube.transform.localPosition = new Vector3(section.plane.transform.localScale.x * 2 * s, (section.plane.transform.parent.position.y / 2) * s, j);
+                      section.interiorObjects.Add(cube);
+                  }
 
-                for (int j = 0; j <= (int)section.plane.transform.localScale.z / 2; j++)
-                {
-                    GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
-                    cube.name = $"CubeR{section.plane.GetInstanceID()}{j}";
-                    cube.transform.parent = section.interiorObjectsRoot.transform;
-                    cube.transform.localScale = new Vector3(2.0f, Random.Range(16.0f, 45.0f * s), Random.Range(0.5f, 1.0f));
-                    cube.transform.localPosition = new Vector3(-section.plane.transform.localScale.x * 2 * s, (section.plane.transform.parent.position.y / 2) * s, j);
-                    section.interiorObjects.Add(cube);
-                }
-            }
+                  for (int j = 0; j <= (int)section.plane.transform.localScale.z / 2; j++)
+                  {
+                      GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
+                      cube.name = $"CubeR{section.plane.GetInstanceID()}{j}";
+                      cube.transform.parent = section.interiorObjectsRoot.transform;
+                      cube.transform.localScale = new Vector3(2.0f, Random.Range(16.0f, 45.0f * s), Random.Range(0.5f, 1.0f));
+                      cube.transform.localPosition = new Vector3(-section.plane.transform.localScale.x * 2 * s, (section.plane.transform.parent.position.y / 2) * s, j);
+                      section.interiorObjects.Add(cube);
+                  }
+              }
+            */
+
+            section.index = i;
 
             _sectionObjects.Add(section);
 
-            if((i % 2) == 0 || i == 0)
+            if (i % 2 == 0 && i != 0)
+                resetTrigger.backgroundObject = (i + 1) > _sectionObjects.Count - 1 ? _sectionObjects[0] : _sectionObjects[i + 1];           
+            else if (i % 2 != 0)
                 resetTrigger.backgroundObject = _sectionObjects[i];
-            else
-                resetTrigger.backgroundObject = _sectionObjects[i - 1];
+            
         }
     }
 

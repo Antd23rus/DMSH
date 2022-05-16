@@ -13,14 +13,20 @@ public class BackgroundResetTrigger : MonoBehaviour
     }
 
     protected void OnTriggerEnter(Collider other)
-    {        
-        Debug.Log($"{backgroundObject.plane.name} {backgroundPoint}");
-        //backgroundObject.transform.position = backgroundPoint.transform.position;
+    {
+        if (backgroundObject == null)
+            return;
+        
         backgroundObject.plane.transform.position = new Vector3(backgroundPoint.x,
             backgroundPoint.y, backgroundPoint.z / 1.5f);
 
-        //backgroundObject.interiorObjectsRoot.transform.position = backgroundObject.plane.transform.position;
-
-
+        //backgroundObject.planeEndPoint = new Vector3(backgroundObject.plane.transform.position.x,
+        //    backgroundObject.plane.transform.position.y,
+        //    (backgroundObject.plane.transform.localScale.z * 5 * (backgroundObject.index + 1)) + (backgroundObject.index * 100)); 
+        //
+        //backgroundObject.planeMiddlePoint = new Vector3(backgroundObject.plane.transform.position.x,
+        //    backgroundObject.plane.transform.position.y,
+        //    backgroundObject.plane.transform.position.z + (backgroundObject.plane.transform.localScale.z * 10 * backgroundObject.index));
+        //
     }
 }

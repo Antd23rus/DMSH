@@ -2187,7 +2187,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ca950368d0ab7054c9f7ddbd52f440b2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  objectCount: 10
+  objectCount: 5
   objectPrefab: {fileID: 8560063986377600568, guid: f3112435646188f4b8d5ce94b1c0cebc, type: 3}
   spawnerTimer: {fileID: 1408109149}
   movablePathObjectsList:
@@ -2203,7 +2203,7 @@ MonoBehaviour:
   loop: 1
   holdDistanceBetweenObjects: 1
   distanceAccuracy: 0.1
-  distanceBetweenObjects: 2
+  distanceBetweenObjects: 6
   stageSystem: {fileID: 0}
   lineColor: {r: 1, g: 0.41020894, b: 0, a: 1}
 --- !u!4 &1408109148
